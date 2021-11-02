@@ -3,7 +3,7 @@ Game Off 2021 Entry
 
 ## Story Idea 1
 
-** SPOILERS **
+-- **SPOILERS** --
 
 It's a postapocalypical world. The remnants of urbanization is visible, but vegitation is reclaiming most of what previously was in the human domain.
 With the climate change having wrecked both society and upended the balance in nature, there are small pockets of humaity left and an abundance of small critters and crawlers.
