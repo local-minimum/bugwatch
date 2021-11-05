@@ -1,7 +1,7 @@
 # bugwatch
 Game Off 2021 Entry
 
-## Story Idea 1
+## Story
 
 -- **SPOILERS** --
 
@@ -14,4 +14,27 @@ At the outset the player sees the protagonist looking for bugs among the ruins a
 As the game progresses it becomes more and more evident that something is off and the player is a bit too eager about the bugs.
 Because in reality the player is parasitized and is infact trying to find a mate bringing the player as an offering of a nursery for the next generation of bugs.
 
-But how does it end? 
+## Bug interaction phases
+
+1. **Spot**: Get some indication of bug, but not more (hear noise in a wall, see on inside but doesn't dare enter, that type of thing)
+2. **Observe**: Get to see enough to make a sketch in `notebook`
+3. **Collect**: Have something to lure/trap bug then put in `collection jar`
+
+For **Collect** there's a need for `bait`.
+
+## Baits
+
+1. `Sweets`
+2. `Rat` (dead?) If one attempts to interact with the spot where the rat should be placed before one has the rat the player may joke about using themself.
+3. ...
+4. `Self`
+
+To be able to interact with some `baits` and open up other parts of the map there are tools to pick up.
+
+## Tools
+
+1. `Gloves` (perhaps a pair of yellow cleaning gloves), required to interact with nasty things like `trash bins` and `carcasses`.
+2. `Helmet` (perhaps a kids bike helmet), required to dare enter building since they are unsafe and parts of the ceiling may fall down.
+3. `Weapon` (perhaps a baseball bat), because some parts looks too dangerous (not really, but it's to feel safe).
+
+Maybe something too that would allow balancing on a log / something that bridges a small ditch with a few centimeters of water in the bottom. Life preserver or similar is a bit too similar to `helmet` in function so perhaps rather something that allows creation of what will span the ditch.
