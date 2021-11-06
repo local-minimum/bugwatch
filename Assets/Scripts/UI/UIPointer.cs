@@ -32,7 +32,7 @@ public class UIPointer : MonoBehaviour
     Color inactive;
 
     [SerializeField]
-    UIPointerMode startMode;
+    UIPointerMode startMode = UIPointerMode.Default;
 
     void Set(UIPointerMode mode)
     {
