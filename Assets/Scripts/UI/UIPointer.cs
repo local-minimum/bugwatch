@@ -15,6 +15,7 @@ public class UIPointer : MonoBehaviour
             return _mode;
         }
         set {
+            if (_mode == value) return;
             _instance.Set(value);
         }
     } 

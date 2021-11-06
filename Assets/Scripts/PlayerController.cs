@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     Transform _cameraTransform;
 
+    [SerializeField, Range(10, 1000)]
+    float viewDistance = 200;
+
     bool ready = false;
 
     private void Start()
@@ -42,28 +45,62 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (!ready) return;
+        UpdateMove();
+        UpdateRotation();
+        UpdateUpDownLook();
+        UpdateLookAt();
+    }
 
-        // Move
+    private void UpdateMove()
+    {
         var horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
         var moveVector = transform.forward * vertical + transform.right * horizontal;
         moveVector = Vector3.ClampMagnitude(moveVector, 1);
         _controller.Move(moveVector * speed * Time.deltaTime);
+    }
 
-        // Rotation
+    private void UpdateRotation()
+    {
         var a = Input.GetAxis("Mouse X") * mouseAngleSpeed * Time.deltaTime;
         var rotation = transform.rotation;
         rotation *= Quaternion.AngleAxis(a, Vector3.up);
         transform.rotation = rotation;
+    }
 
-        // Updown look
+    private void UpdateUpDownLook()
+    {
         _upDownRotation = Mathf.Clamp(
             _upDownRotation - Input.GetAxis("Mouse Y") * mouseAngleSpeed * Time.deltaTime,
             lookMinRotation,
             lookMaxRotation
         );
         _cameraTransform.localRotation = Quaternion.Euler(_upDownRotation, 0, 0);
+    }
 
+    private void UpdateLookAt()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
+        if (Physics.Raycast(ray, out hit, viewDistance))
+        {
+            var interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable)
+            {
+                UIPointer.Mode = interactable.InteractionMode(hit.distance);
+                if (interactable.CanTriggerInteraction(hit.distance))
+                {
+                    // TODO: trigger ui with verb
+                    var verb = interactable.activationVerb;
+                }
+            } else
+            {
+                UIPointer.Mode = UIPointerMode.Default;
+            }
+        } else
+        {
+            UIPointer.Mode = UIPointerMode.Default;
+        }
     }
 
     private void OnDestroy()

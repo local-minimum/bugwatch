@@ -225,5 +225,6 @@ MonoBehaviour:
   speed: 3.5
   mouseAngleSpeed: 600
   lookMinRotation: -45
-  lookMaxRotation: 30
+  lookMaxRotation: 45
   _cameraTransform: {fileID: 3445105479277694480}
+  viewDistance: 200
