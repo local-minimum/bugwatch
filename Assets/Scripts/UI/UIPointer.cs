@@ -18,7 +18,15 @@ public class UIPointer : MonoBehaviour
             if (_mode == value) return;
             _instance.Set(value);
         }
-    } 
+    }
+
+    public static string Verb
+    {
+        set
+        {
+            _instance.SetVerb(value);
+        }
+    }
 
     [SerializeField]
     Image pointer;
@@ -35,11 +43,28 @@ public class UIPointer : MonoBehaviour
     [SerializeField]
     UIPointerMode startMode = UIPointerMode.Default;
 
+    [SerializeField]
+    Image verbKeyboardImage;
+
     void Set(UIPointerMode mode)
     {
         pointer.color = mode == UIPointerMode.None ? inactive : active;
         interactablePointer.color = mode == UIPointerMode.Interaction ? active : inactive;
         _mode = mode;
+    }
+
+    string _verb = " ";
+    void SetVerb(string verb)
+    {
+        if (_verb == verb) return;
+        if (string.IsNullOrEmpty(verb))
+        {
+            verbKeyboardImage.enabled = false;
+        }
+        else
+        {
+            verbKeyboardImage.enabled = true;
+        }
     }
 
     private void Awake()
@@ -55,6 +80,7 @@ public class UIPointer : MonoBehaviour
     private void Start()
     {
         Mode = startMode;
+        Verb = null;
     }
 
     private void OnDestroy()

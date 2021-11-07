@@ -404,8 +404,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86095f421374b5644b590611819e32f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistanceNotice: 5
-  maxDistanceActivate: 2
+  maxDistanceNotice: 10
+  maxDistanceActivate: 4
+  _activationVerb: Destroy
 --- !u!135 &1585513957
 SphereCollider:
   m_ObjectHideFlags: 0

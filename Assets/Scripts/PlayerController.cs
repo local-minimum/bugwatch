@@ -87,19 +87,16 @@ public class PlayerController : MonoBehaviour
             var interactable = hit.collider.GetComponent<Interactable>();
             if (interactable)
             {
-                UIPointer.Mode = interactable.InteractionMode(hit.distance);
-                if (interactable.CanTriggerInteraction(hit.distance))
-                {
-                    // TODO: trigger ui with verb
-                    var verb = interactable.activationVerb;
-                }
+                interactable.UpdateInteraction(hit.distance);
             } else
             {
                 UIPointer.Mode = UIPointerMode.Default;
+                UIPointer.Verb = null;
             }
         } else
         {
             UIPointer.Mode = UIPointerMode.Default;
+            UIPointer.Verb = null;
         }
     }
 

@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &1360582322 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1360582322, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+  m_PrefabInstance: {fileID: 2015967027}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1610903138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -187,9 +198,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1360582322, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242454127924433597, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6242454129131052250, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
       propertyPath: m_Name
       value: InGameOverlayCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242454129131052251, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6242454129131052254, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
       propertyPath: m_Pivot.x
@@ -273,6 +296,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6242454129131052254, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242454129131052255, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+      propertyPath: verbKeyboardImage
+      value: 
+      objectReference: {fileID: 1360582322}
+    - target: {fileID: 6242454129611430752, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
