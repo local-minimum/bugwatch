@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,15 +22,41 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Range(10, 1000)]
     float viewDistance = 200;
+    
+    MovementControl playerControls;
 
     bool ready = false;
+    private void Awake()
+    {
+        _controller = GetComponent<CharacterController>();
+        playerControls = new MovementControl();
+    }
 
     private void Start()
     {
-        _controller = GetComponent<CharacterController>();
         Cursor.visible = false;
         StartCoroutine(WaitForLoaded(SceneManager.LoadSceneAsync("GameUI", LoadSceneMode.Additive)));
         
+    }
+
+    private void OnEnable()
+    {
+        playerControls.Enable();
+        playerControls.Player.Interact.started += InteractStart;
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Disable();
+        playerControls.Player.Interact.started -= InteractStart;
+    }
+    private void InteractStart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (interactable)
+        {
+
+            Destroy(interactable.gameObject);
+        }
     }
 
     IEnumerator<WaitForEndOfFrame> WaitForLoaded(AsyncOperation operation)
@@ -40,43 +67,52 @@ public class PlayerController : MonoBehaviour
         }
         ready = true;
         UIPointer.Mode = UIPointerMode.Default;
+        UIPointer.Verb = null;
+        UIPointer.VerbKey = null;
     }
 
     private void Update()
-    {
-        if (!ready) return;
-        UpdateMove();
-        UpdateRotation();
-        UpdateUpDownLook();
+    {        
+        if (!ready) return;        
+        var move = playerControls.Player.Move.ReadValue<Vector2>();
+        var look = playerControls.Player.Look.ReadValue<Vector2>();
+        OnMove(move);
+        OnLook(look);
         UpdateLookAt();
     }
 
-    private void UpdateMove()
+    public void OnMove(Vector2 input)
     {
-        var horizontal = Input.GetAxis("Horizontal");
-        var vertical = Input.GetAxis("Vertical");
-        var moveVector = transform.forward * vertical + transform.right * horizontal;
-        moveVector = Vector3.ClampMagnitude(moveVector, 1);
-        _controller.Move(moveVector * speed * Time.deltaTime);
+        var move = Vector3.ClampMagnitude(transform.forward * input.y + transform.right * input.x, 1);
+        _controller.Move(move * speed * Time.deltaTime);
     }
 
-    private void UpdateRotation()
+    public void OnLook(Vector2 lookVector)
     {
-        var a = Input.GetAxis("Mouse X") * mouseAngleSpeed * Time.deltaTime;
+        lookVector *= Time.deltaTime * mouseAngleSpeed;
+        UpdateRotation(lookVector.x);
+        UpdateUpDownLook(lookVector.y);
+
+    }
+
+    private void UpdateRotation(float x)
+    {                
         var rotation = transform.rotation;
-        rotation *= Quaternion.AngleAxis(a, Vector3.up);
+        rotation *= Quaternion.AngleAxis(x, Vector3.up);
         transform.rotation = rotation;
     }
 
-    private void UpdateUpDownLook()
+    private void UpdateUpDownLook(float y)
     {
         _upDownRotation = Mathf.Clamp(
-            _upDownRotation - Input.GetAxis("Mouse Y") * mouseAngleSpeed * Time.deltaTime,
+            _upDownRotation - y,
             lookMinRotation,
             lookMaxRotation
         );
         _cameraTransform.localRotation = Quaternion.Euler(_upDownRotation, 0, 0);
     }
+
+    Interactable interactable;
 
     private void UpdateLookAt()
     {
@@ -87,19 +123,33 @@ public class PlayerController : MonoBehaviour
             var interactable = hit.collider.GetComponent<Interactable>();
             if (interactable)
             {
-                UIPointer.Mode = interactable.InteractionMode(hit.distance);
+                var bindingKey = playerControls
+                    .Player
+                    .Interact
+                    .bindings
+                    .Select(b => b.path.Split('/').LastOrDefault())
+                    .FirstOrDefault();                
+                interactable.UpdateInteraction(hit.distance, bindingKey);
+
                 if (interactable.CanTriggerInteraction(hit.distance))
                 {
-                    // TODO: trigger ui with verb
-                    var verb = interactable.activationVerb;
+                    this.interactable = interactable;
+                } else
+                {
+                    this.interactable = null;
                 }
             } else
             {
                 UIPointer.Mode = UIPointerMode.Default;
+                UIPointer.Verb = null;
+                UIPointer.VerbKey = null;
+                this.interactable = null;
             }
         } else
         {
             UIPointer.Mode = UIPointerMode.Default;
+            UIPointer.Verb = null;
+            UIPointer.VerbKey = null;
         }
     }
 

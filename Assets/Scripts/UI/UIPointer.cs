@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using System.Linq;
 
 public enum UIPointerMode { None, Default, Interaction };
 
@@ -18,7 +20,23 @@ public class UIPointer : MonoBehaviour
             if (_mode == value) return;
             _instance.Set(value);
         }
-    } 
+    }
+
+    public static string Verb
+    {
+        set
+        {
+            _instance.SetVerb(value);
+        }
+    }
+
+    public static string VerbKey
+    {
+        set
+        {
+            _instance.SetVerbKey(value);
+        }
+    }
 
     [SerializeField]
     Image pointer;
@@ -35,11 +53,53 @@ public class UIPointer : MonoBehaviour
     [SerializeField]
     UIPointerMode startMode = UIPointerMode.Default;
 
+    [SerializeField]
+    Image verbKeyboardImage;
+
+    [SerializeField]
+    TMPro.TextMeshProUGUI verbKeyboardText;
+
+    [SerializeField]
+    TMPro.TextMeshProUGUI verbText;
+
     void Set(UIPointerMode mode)
     {
         pointer.color = mode == UIPointerMode.None ? inactive : active;
         interactablePointer.color = mode == UIPointerMode.Interaction ? active : inactive;
         _mode = mode;
+    }
+
+    string _verbKey = " ";
+    void SetVerbKey(string verbKey)
+    {
+        if (_verbKey == verbKey) return;
+        if (string.IsNullOrEmpty(verbKey))
+        {
+            verbKeyboardImage.enabled = false;
+            verbKeyboardText.enabled = false;
+        }
+        else
+        {
+            verbKeyboardText.text = verbKey;
+            verbKeyboardText.enabled = true;
+            verbKeyboardImage.enabled = true;
+        }
+        _verbKey = verbKey;
+    }
+
+    string _verb = " ";
+    void SetVerb(string verb)
+    {
+        if (_verb == verb) return;
+        if (string.IsNullOrEmpty(verb))
+        {
+            verbText.enabled = false;
+        } else
+        {
+            verbText.text = verb;
+            verbText.enabled = true;
+        }
+        _verb = verb;
     }
 
     private void Awake()
@@ -55,6 +115,7 @@ public class UIPointer : MonoBehaviour
     private void Start()
     {
         Mode = startMode;
+        Verb = null;
     }
 
     private void OnDestroy()

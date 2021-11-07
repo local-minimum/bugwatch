@@ -404,8 +404,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86095f421374b5644b590611819e32f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistanceNotice: 5
-  maxDistanceActivate: 2
+  maxDistanceNotice: 10
+  maxDistanceActivate: 4
+  _activationVerb: Destroy
 --- !u!135 &1585513957
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -533,6 +534,10 @@ PrefabInstance:
     - target: {fileID: 3445105480019852758, guid: 263f39675387b714b8a619752008b26e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445105480019852759, guid: 263f39675387b714b8a619752008b26e, type: 3}
+      propertyPath: mouseAngleSpeed
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3445105480019852762, guid: 263f39675387b714b8a619752008b26e, type: 3}
       propertyPath: m_Name

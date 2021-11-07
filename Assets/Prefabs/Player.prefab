@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3.5
-  mouseAngleSpeed: 600
+  mouseAngleSpeed: 100
   lookMinRotation: -45
   lookMaxRotation: 45
   _cameraTransform: {fileID: 3445105479277694480}
