@@ -130,22 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1298239904, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1360582320, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1360582322, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423582544, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6242454129131052250, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
       propertyPath: m_Name
       value: InGameOverlayCanvas
