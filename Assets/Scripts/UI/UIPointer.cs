@@ -30,6 +30,14 @@ public class UIPointer : MonoBehaviour
         }
     }
 
+    public static string VerbKey
+    {
+        set
+        {
+            _instance.SetVerbKey(value);
+        }
+    }
+
     [SerializeField]
     Image pointer;
 
@@ -49,7 +57,10 @@ public class UIPointer : MonoBehaviour
     Image verbKeyboardImage;
 
     [SerializeField]
-    InputActionAsset inputActions;
+    TMPro.TextMeshProUGUI verbKeyboardText;
+
+    [SerializeField]
+    TMPro.TextMeshProUGUI verbText;
 
     void Set(UIPointerMode mode)
     {
@@ -58,25 +69,37 @@ public class UIPointer : MonoBehaviour
         _mode = mode;
     }
 
+    string _verbKey = " ";
+    void SetVerbKey(string verbKey)
+    {
+        if (_verbKey == verbKey) return;
+        if (string.IsNullOrEmpty(verbKey))
+        {
+            verbKeyboardImage.enabled = false;
+            verbKeyboardText.enabled = false;
+        }
+        else
+        {
+            verbKeyboardText.text = verbKey;
+            verbKeyboardText.enabled = true;
+            verbKeyboardImage.enabled = true;
+        }
+        _verbKey = verbKey;
+    }
+
     string _verb = " ";
     void SetVerb(string verb)
     {
         if (_verb == verb) return;
         if (string.IsNullOrEmpty(verb))
         {
-            verbKeyboardImage.enabled = false;
-        }
-        else
+            verbText.enabled = false;
+        } else
         {
-            verbKeyboardImage.enabled = true;
-            var action = inputActions.FindAction("Interact", true);
-            var binding = action
-                .bindings
-                .Select(b => b.name)
-                .FirstOrDefault();
-
-            Debug.Log(binding);
+            verbText.text = verb;
+            verbText.enabled = true;
         }
+        _verb = verb;
     }
 
     private void Awake()

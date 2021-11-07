@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,12 +22,18 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Range(10, 1000)]
     float viewDistance = 200;
+    
+    MovementControl playerControls;
 
     bool ready = false;
+    private void Awake()
+    {
+        _controller = GetComponent<CharacterController>();
+        playerControls = new MovementControl();
+    }
 
     private void Start()
     {
-        _controller = GetComponent<CharacterController>();
         Cursor.visible = false;
         StartCoroutine(WaitForLoaded(SceneManager.LoadSceneAsync("GameUI", LoadSceneMode.Additive)));
         
@@ -35,29 +41,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponent<PlayerInput>().onActionTriggered += PlayerController_onActionTriggered;
+        playerControls.Enable();
     }
 
     private void OnDisable()
     {
-        GetComponent<PlayerInput>().onActionTriggered -= PlayerController_onActionTriggered;
-    }
-
-    private void PlayerController_onActionTriggered(InputAction.CallbackContext context)
-    {
-        if (!ready) return;
-        var action = context.action;
-        switch (action.name)
-        {
-            case "Move":
-                OnMove(context.ReadValue<Vector2>());
-                break;
-            case "Interact":
-                break;
-            case "Look":
-                break;
-        }
-        
+        playerControls.Disable();
     }
 
     IEnumerator<WaitForEndOfFrame> WaitForLoaded(AsyncOperation operation)
@@ -68,22 +57,29 @@ public class PlayerController : MonoBehaviour
         }
         ready = true;
         UIPointer.Mode = UIPointerMode.Default;
+        UIPointer.Verb = null;
+        UIPointer.VerbKey = null;
     }
 
     private void Update()
     {        
         if (!ready) return;        
+        var move = playerControls.Player.Move.ReadValue<Vector2>();
+        var look = playerControls.Player.Look.ReadValue<Vector2>();
+        OnMove(move);
+        OnLook(look);
         UpdateLookAt();
     }
 
-    public void OnMove(Vector2 moveVector)
-    {        
-        _controller.Move(moveVector.normalized * speed * Time.deltaTime);
+    public void OnMove(Vector2 input)
+    {
+        var move = Vector3.ClampMagnitude(transform.forward * input.y + transform.right * input.x, 1);
+        _controller.Move(move * speed * Time.deltaTime);
     }
 
-    public void OnLook(InputValue input)
+    public void OnLook(Vector2 lookVector)
     {
-        Vector2 lookVector = input.Get<Vector2>();
+        lookVector *= Time.deltaTime * mouseAngleSpeed;
         UpdateRotation(lookVector.x);
         UpdateUpDownLook(lookVector.y);
 
@@ -99,7 +95,7 @@ public class PlayerController : MonoBehaviour
     private void UpdateUpDownLook(float y)
     {
         _upDownRotation = Mathf.Clamp(
-            _upDownRotation - y * mouseAngleSpeed * Time.deltaTime,
+            _upDownRotation - y,
             lookMinRotation,
             lookMaxRotation
         );
@@ -115,16 +111,24 @@ public class PlayerController : MonoBehaviour
             var interactable = hit.collider.GetComponent<Interactable>();
             if (interactable)
             {
-                interactable.UpdateInteraction(hit.distance);
+                var bindingKey = playerControls
+                    .Player
+                    .Interact
+                    .bindings
+                    .Select(b => b.path.Split('/').LastOrDefault())
+                    .FirstOrDefault();                
+                interactable.UpdateInteraction(hit.distance, bindingKey);
             } else
             {
                 UIPointer.Mode = UIPointerMode.Default;
                 UIPointer.Verb = null;
+                UIPointer.VerbKey = null;
             }
         } else
         {
             UIPointer.Mode = UIPointerMode.Default;
             UIPointer.Verb = null;
+            UIPointer.VerbKey = null;
         }
     }
 

@@ -37,11 +37,12 @@ public class Interactable : MonoBehaviour
         return live && distance < maxDistanceActivate;
     }
 
-    public void UpdateInteraction(float distance)
+    public void UpdateInteraction(float distance, string interactionKey)
     {
         UIPointer.Mode = InteractionMode(distance);
         if (CanTriggerInteraction(distance))
         {
+            UIPointer.VerbKey = interactionKey;
             UIPointer.Verb = activationVerb;
             
         }
