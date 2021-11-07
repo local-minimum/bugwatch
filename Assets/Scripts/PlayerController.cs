@@ -42,11 +42,21 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         playerControls.Enable();
+        playerControls.Player.Interact.started += InteractStart;
     }
 
     private void OnDisable()
     {
         playerControls.Disable();
+        playerControls.Player.Interact.started -= InteractStart;
+    }
+    private void InteractStart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (interactable)
+        {
+
+            Destroy(interactable.gameObject);
+        }
     }
 
     IEnumerator<WaitForEndOfFrame> WaitForLoaded(AsyncOperation operation)
@@ -102,6 +112,8 @@ public class PlayerController : MonoBehaviour
         _cameraTransform.localRotation = Quaternion.Euler(_upDownRotation, 0, 0);
     }
 
+    Interactable interactable;
+
     private void UpdateLookAt()
     {
         RaycastHit hit;
@@ -118,11 +130,20 @@ public class PlayerController : MonoBehaviour
                     .Select(b => b.path.Split('/').LastOrDefault())
                     .FirstOrDefault();                
                 interactable.UpdateInteraction(hit.distance, bindingKey);
+
+                if (interactable.CanTriggerInteraction(hit.distance))
+                {
+                    this.interactable = interactable;
+                } else
+                {
+                    this.interactable = null;
+                }
             } else
             {
                 UIPointer.Mode = UIPointerMode.Default;
                 UIPointer.Verb = null;
                 UIPointer.VerbKey = null;
+                this.interactable = null;
             }
         } else
         {
