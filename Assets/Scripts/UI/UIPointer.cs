@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using System.Linq;
 
 public enum UIPointerMode { None, Default, Interaction };
 
@@ -46,6 +48,9 @@ public class UIPointer : MonoBehaviour
     [SerializeField]
     Image verbKeyboardImage;
 
+    [SerializeField]
+    InputActionAsset inputActions;
+
     void Set(UIPointerMode mode)
     {
         pointer.color = mode == UIPointerMode.None ? inactive : active;
@@ -64,6 +69,13 @@ public class UIPointer : MonoBehaviour
         else
         {
             verbKeyboardImage.enabled = true;
+            var action = inputActions.FindAction("Interact", true);
+            var binding = action
+                .bindings
+                .Select(b => b.name)
+                .FirstOrDefault();
+
+            Debug.Log(binding);
         }
     }
 

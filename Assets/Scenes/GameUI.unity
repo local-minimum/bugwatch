@@ -332,6 +332,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6242454129131052255, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
+      propertyPath: inputActions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: fe7b687b7d275ed45a5b84dde0543615, type: 3}
+    - target: {fileID: 6242454129131052255, guid: 41cb267ebf9c549468c85c93324fbcd1, type: 3}
       propertyPath: verbKeyboardImage
       value: 
       objectReference: {fileID: 1360582322}
