@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum CollectableType
 {
+    None,
     Sweets,
     Rat,
     Gloves,
@@ -15,6 +16,9 @@ public class Collectable : MonoBehaviour
 {
     [SerializeField]
     CollectableType collectableType;
+
+    [SerializeField]
+    CollectableType requiredCollectable = CollectableType.None;
 
     Interactable interactable;
 
@@ -28,6 +32,10 @@ public class Collectable : MonoBehaviour
         if (interactable == null)
         {
             Debug.LogError(string.Format("{0} was collectable but not interactable!", name));
+            Destroy(gameObject);
+        } else if (collectableType == CollectableType.None)
+        {
+            Debug.LogError(string.Format("{0} was of collectable type None, this isn't allowed", name));
             Destroy(gameObject);
         }
     }
@@ -45,8 +53,17 @@ public class Collectable : MonoBehaviour
         }
     }
 
+    private void HandleRefuseAction()
+    {
+
+    }
+
     private void Interactable_OnActivation()
     {
+        if (requiredCollectable != CollectableType.None & !BugWatchSettings.HasPickedUp(requiredCollectable)) {
+            HandleRefuseAction();
+            return;
+        }
         BugWatchSettings.PickUp(collectableType);
         Destroy(gameObject);
     }
