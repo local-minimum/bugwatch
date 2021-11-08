@@ -6,6 +6,7 @@ using System.Reflection;
 
 public static class BugWatchSettings
 {
+    #region GENERIC
     static bool _verbose = true;
     private static void _ResetSection(string section)
     {
@@ -27,6 +28,19 @@ public static class BugWatchSettings
             }
         }
     }
+    private static void _ResetEnum<T>(System.Func<T, string> keyMaker, T e) where T: System.Enum
+    {
+        foreach (T collectable in System.Enum.GetValues(e.GetType()))
+        {
+            var key = keyMaker(collectable);
+            if (PlayerPrefs.HasKey(key))
+            {
+                if (_verbose) Debug.Log(string.Format("Removing setting for {0}", key));
+                PlayerPrefs.DeleteKey(key);
+            }
+        }
+    }
+    #endregion
 
     #region CONTROLS
     private static readonly string _CONTROLS = "Controls";
@@ -68,19 +82,12 @@ public static class BugWatchSettings
     public static void ResetInventory()
     {
         _ResetSection(_INVENTORY);
-        foreach (CollectableType collectable in System.Enum.GetValues(typeof(CollectableType)))
-        {
-            var key = CollectableKey(collectable);
-            if (PlayerPrefs.HasKey(key))
-            {
-                if (_verbose) Debug.Log(string.Format("Removing setting for {0}", key));
-                PlayerPrefs.DeleteKey(key);
-            }
-        }
+        // Can be any of the enum values
+        _ResetEnum(CollectableKey, CollectableType.None);
     }
     #endregion
 
-    #region
+    #region PROGRESS
     private static readonly string _PROGRESS = "Progress";
     private static readonly string _PROGRESS_HAS_GAME = string.Format("{0}.HasGame", _PROGRESS);
     private static readonly string _PROGRESS_LEVEL = string.Format("{0}.Level", _PROGRESS);
@@ -105,8 +112,53 @@ public static class BugWatchSettings
     {
         ResetProgress();
         ResetInventory();
+        ResetSightings();
         PlayerPrefs.SetInt(_PROGRESS_HAS_GAME, 42);
 
+    }
+    #endregion
+
+    #region SIGHTINGS
+    private static readonly string _SIGHTING = "Sighting";
+    private static string SightingKey(Sighting sighting) => string.Format("{0}.{1}", _SIGHTING, sighting);
+
+    private static SightingType GetSightingType(Sighting sighting)
+    {
+        var key = SightingKey(sighting);
+        var value = PlayerPrefs.GetString(key, "None");
+        SightingType sightingType;
+        if (System.Enum.TryParse(value, out sightingType))
+        {
+            return sightingType;
+        }
+        return SightingType.None;
+    }
+    public static SightingType GetNextSightingType(Sighting sighting)
+    {
+        switch (GetSightingType(sighting))
+        {
+            case SightingType.None:
+                return SightingType.Spot;
+            case SightingType.Spot:
+                return SightingType.Observe;
+            case SightingType.Observe:
+                return SightingType.Capture;
+            default:
+                return SightingType.None;
+        }
+    }
+
+    public static void SetSightingType(Sighting sighting, SightingType sightingType)
+    {
+        var key = SightingKey(sighting);
+        PlayerPrefs.SetString(key, sightingType.ToString());
+    }
+
+    public static void ResetSightings()
+    {
+        _ResetSection(_SIGHTING);
+        // Can be any of the enum values
+        _ResetEnum(SightingKey, Sighting.Crawler);
     }
     #endregion
 }
