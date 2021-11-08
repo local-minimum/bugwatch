@@ -58,13 +58,19 @@ public class Collectable : MonoBehaviour
 
     }
 
+    private void HandlePickUp()
+    {
+        BugWatchSettings.PickUp(collectableType);
+        Destroy(gameObject);
+    }
+
     private void Interactable_OnActivation()
     {
         if (requiredCollectable != CollectableType.None & !BugWatchSettings.HasPickedUp(requiredCollectable)) {
             HandleRefuseAction();
-            return;
+        } else
+        {
+            HandlePickUp();
         }
-        BugWatchSettings.PickUp(collectableType);
-        Destroy(gameObject);
     }
 }
