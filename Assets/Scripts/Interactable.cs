@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void ActivationEvent();
+
 public class Interactable : MonoBehaviour
 {
+    public event ActivationEvent OnActivation;
+
     [SerializeField, Range(0, 100)]
     private float maxDistanceNotice = 1f;
 
@@ -46,5 +50,10 @@ public class Interactable : MonoBehaviour
             UIPointer.Verb = activationVerb;
             
         }
+    }
+
+    public void Activate()
+    {
+        OnActivation?.Invoke();
     }
 }

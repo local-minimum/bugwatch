@@ -54,8 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         if (interactable)
         {
-
-            Destroy(interactable.gameObject);
+            interactable.Activate();
         }
     }
 
