@@ -4,8 +4,15 @@ using UnityEngine;
 using System.Linq;
 using System.Reflection;
 
+public enum GameSetting { MouseInvertY, WordsPerMinute };
+public delegate void SettingsChange<T>(GameSetting setting, T value);
+
+
 public static class BugWatchSettings
 {
+    public static event SettingsChange<float> OnChangeFloatSetting;
+    public static event SettingsChange<bool> OnChangeBoolSetting;
+
     #region GENERIC
     static bool _verbose = true;
     private static void _ResetSection(string section)
@@ -44,24 +51,33 @@ public static class BugWatchSettings
 
     #region CONTROLS
     private static readonly string _CONTROLS = "Controls";
-    private static readonly string _MOUSE_Y_DIRECTION = string.Format("{0}.Mouse.Y", _CONTROLS);
-    public static float MouseYDirection
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(_MOUSE_Y_DIRECTION, 1) == 1 ? 1f : -1f;
-        }
-    }
+    private static readonly string _CONTROLS_MOUSE_Y_DIRECTION = string.Format("{0}.Mouse.Y", _CONTROLS);
+    private static readonly string _CONTROLS_WORDS_PER_MINUTE = string.Format("{0}.Text.WordsPerMinute", _CONTROLS);
 
     public static bool MouseYDirectionInverted
     {
         get
         {
-            return PlayerPrefs.GetInt(_MOUSE_Y_DIRECTION, 1) == -1;
+            return PlayerPrefs.GetInt(_CONTROLS_MOUSE_Y_DIRECTION, 1) == -1;
         }
         set
         {
-            PlayerPrefs.SetInt(_MOUSE_Y_DIRECTION, value ? -1 : 1);
+            PlayerPrefs.SetInt(_CONTROLS_MOUSE_Y_DIRECTION, value ? -1 : 1);
+            OnChangeBoolSetting?.Invoke(GameSetting.MouseInvertY, value);
+        }
+    }
+
+    public static float WordsPerMinute
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat(_CONTROLS_WORDS_PER_MINUTE, 220);
+        }
+
+        set
+        {
+            PlayerPrefs.SetFloat(_CONTROLS_MOUSE_Y_DIRECTION, value);
+            OnChangeFloatSetting?.Invoke(GameSetting.WordsPerMinute, value);
         }
     }
 

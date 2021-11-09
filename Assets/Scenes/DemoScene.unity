@@ -123,6 +123,96 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &77172714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 77172716}
+  - component: {fileID: 77172715}
+  m_Layer: 0
+  m_Name: Refuse Entry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &77172715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77172714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captions:
+  - text: Nope, that  seems to be a scary void.
+--- !u!4 &77172716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77172714}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1216354509}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &215550494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 215550495}
+  - component: {fileID: 215550496}
+  m_Layer: 0
+  m_Name: Refuse Story
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &215550495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215550494}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1560739379}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &215550496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215550494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captions:
+  - text: No touching that with my bare hands!
 --- !u!1 &318180770
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,7 +517,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 97.57, y: 1.76, z: 108.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 77172716}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -444,6 +535,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredCollectables: 01000000
+  entryStory: {fileID: 0}
+  refusedEntryStory: {fileID: 77172715}
 --- !u!1 &1560739373
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +551,7 @@ GameObject:
   - component: {fileID: 1560739376}
   - component: {fileID: 1560739375}
   - component: {fileID: 1560739374}
+  - component: {fileID: 1560739380}
   m_Layer: 0
   m_Name: Rat
   m_TagString: Untagged
@@ -479,6 +573,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectableType: 2
   requiredCollectable: 3
+  refuseStory: {fileID: 215550496}
+  pickupStory: {fileID: 0}
 --- !u!114 &1560739375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,10 +663,24 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 104.08, y: 2.94, z: 106.75865}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 215550495}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1560739380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560739373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captions: []
 --- !u!1 &1585513955
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,6 +808,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectableType: 1
   requiredCollectable: 0
+  refuseStory: {fileID: 0}
+  pickupStory: {fileID: 0}
 --- !u!1001 &3445105480114987404
 PrefabInstance:
   m_ObjectHideFlags: 0

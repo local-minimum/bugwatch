@@ -19,6 +19,12 @@ public class BugSighting : MonoBehaviour
 
     Interactable interactable;
 
+    [SerializeField]
+    StoryBit sightingStory;
+
+    [SerializeField]
+    StoryBit refuseStory;
+
     private void Awake()
     {
         interactable = GetComponent<Interactable>();
@@ -43,17 +49,17 @@ public class BugSighting : MonoBehaviour
 
     void HandleRefuseSighting(CollectableType collectableType)
     {
-
+        refuseStory?.EmitStory(collectableType.ToString());
     }
 
     void HandleRefuseSighting(SightingType sightingType)
     {
-
+        refuseStory?.EmitStory(sightingType.ToString());
     }
 
     void HandleSighting()
     {
-
+        sightingStory?.EmitStory();
     }
 
     private void Interactable_OnActivation()

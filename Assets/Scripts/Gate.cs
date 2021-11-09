@@ -7,19 +7,25 @@ public class Gate : MonoBehaviour
     [SerializeField, Tooltip("If requiring None, can't be opened.")]
     CollectableType[] requiredCollectables;
 
+    [SerializeField]
+    StoryBit entryStory;
+
+    [SerializeField]
+    StoryBit refusedEntryStory;
+
     private void HandleRefusedEntry(CollectableType collectableType)
     {
-        Debug.Log("refused " + collectableType);
+        refusedEntryStory?.EmitStory(collectableType.ToString());
     }
 
     private void HandleFirstEntry()
     {
-
+        entryStory?.EmitStory("first");
     }
 
     private void HandleEntry()
     {
-
+        entryStory?.EmitStory("consecutive");
     }
 
     private bool DisableColliders()

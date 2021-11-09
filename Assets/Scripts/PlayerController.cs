@@ -26,17 +26,20 @@ public class PlayerController : MonoBehaviour
     MovementControl playerControls;
 
     bool ready = false;
+    float mouseYDirection = 1;
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         playerControls = new MovementControl();
+        mouseYDirection = BugWatchSettings.MouseYDirectionInverted ? -1 : 1;
     }
 
     private void Start()
     {
         Cursor.visible = false;
         StartCoroutine(WaitForLoaded(SceneManager.LoadSceneAsync("GameUI", LoadSceneMode.Additive)));
-        
+        BugWatchSettings.OnChangeBoolSetting += BugWatchSettings_OnChangeBoolSetting;
     }
 
     private void OnEnable()
@@ -50,6 +53,17 @@ public class PlayerController : MonoBehaviour
         playerControls.Disable();
         playerControls.Player.Interact.started -= InteractStart;
     }
+
+    private void BugWatchSettings_OnChangeBoolSetting(GameSetting setting, bool value)
+    {
+        switch (setting)
+        {
+            case GameSetting.MouseInvertY:
+                mouseYDirection = value ? -1 : 1;
+                break;
+        }
+    }
+
     private void InteractStart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         if (interactable)
@@ -104,7 +118,7 @@ public class PlayerController : MonoBehaviour
     private void UpdateUpDownLook(float y)
     {
         _upDownRotation = Mathf.Clamp(
-            _upDownRotation - y,
+            _upDownRotation - y * mouseYDirection,
             lookMinRotation,
             lookMaxRotation
         );
@@ -155,5 +169,6 @@ public class PlayerController : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.UnloadSceneAsync("GameUI");
+        BugWatchSettings.OnChangeBoolSetting -= BugWatchSettings_OnChangeBoolSetting;
     }
 }

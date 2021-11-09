@@ -22,6 +22,12 @@ public class Collectable : MonoBehaviour
 
     Interactable interactable;
 
+    [SerializeField]
+    StoryBit refuseStory;
+
+    [SerializeField]
+    StoryBit pickupStory;
+
     private void Awake()
     {
         if (BugWatchSettings.HasPickedUp(collectableType))
@@ -55,12 +61,13 @@ public class Collectable : MonoBehaviour
 
     private void HandleRefuseAction()
     {
-
+        refuseStory?.EmitStory();
     }
 
     private void HandlePickUp()
     {
         BugWatchSettings.PickUp(collectableType);
+        pickupStory?.EmitStory();
         Destroy(gameObject);
     }
 
