@@ -84,7 +84,7 @@ public static class BugWatchSettings
     public static void ResetControls() => _ResetSection(_CONTROLS);
     #endregion
 
-    #region Inventory
+    #region INVENTORY
     private static readonly string _INVENTORY = "Inventory";
 
     private static string CollectableKey(CollectableType collectable) => string.Format("{0}.{1}", _INVENTORY, collectable.ToString());    
@@ -149,14 +149,14 @@ public static class BugWatchSettings
         ResetProgress();
         ResetInventory();
         ResetSightings();
-        PlayerPrefs.SetInt(_PROGRESS_HAS_GAME, 42);
-
+        ResetStories();
+        PlayerPrefs.SetInt(_PROGRESS_HAS_GAME, 42);        
     }
     #endregion
 
     #region SIGHTINGS
     private static readonly string _SIGHTING = "Sighting";
-    private static string SightingKey(Sighting sighting) => string.Format("{0}.{1}", _SIGHTING, sighting);
+    private static string SightingKey(Sighting sighting) => string.Format("{0}.{1}", _SIGHTING, sighting.ToString());
 
     private static SightingType GetSightingType(Sighting sighting)
     {
@@ -195,6 +195,49 @@ public static class BugWatchSettings
         _ResetSection(_SIGHTING);
         // Can be any of the enum values
         _ResetEnum(SightingKey, Sighting.Crawler);
+    }
+    #endregion
+
+    #region STORY
+    private static readonly string _STORY = "Story";
+
+    private static string StoryKey(Story story) => string.Format("{0}.{1}", _STORY, story.ToString());
+
+    public static string[] UsedStoryBits(Story story)
+    {
+        string key = StoryKey(story);
+        if (PlayerPrefs.HasKey(key))
+        {
+            return PlayerPrefs.GetString(key).Split(',');
+        }
+        return new string[0];
+    }
+
+    public static void UseStoryBit(Story story, string id)
+    {
+        if (string.IsNullOrEmpty(id)) return;
+
+        if (id.Contains(","))
+        {
+            Debug.LogError(string.Format("Id may not contain comma: '{0}'", id));
+        } else
+        {
+            var bits = UsedStoryBits(story);
+            if (bits.Contains(id))
+            {
+                Debug.LogWarning(string.Format("Reused a story bit '{0}', this should not happen.", id));
+            } else
+            {
+                PlayerPrefs.SetString(StoryKey(story), string.Join(",", bits.Concat(new string[1] { id })));
+            }
+            
+        }
+    }
+
+    public static void ResetStories()
+    {
+        _ResetSection(_STORY);
+        _ResetEnum(StoryKey, Story.RatPickup);
     }
     #endregion
 }

@@ -152,8 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  story: 0
   captions:
-  - text: Nope, that  seems to be a scary void.
+  - id: nope
+    text: Nope, that  seems to be a scary void.
 --- !u!4 &77172716
 Transform:
   m_ObjectHideFlags: 0
@@ -241,8 +243,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  story: 0
   captions:
-  - text: No touching that with my bare hands!
+  - id: no touch
+    text: No touching that with my bare hands!
 --- !u!1 &318180770
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,6 +775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  story: 0
   captions: []
 --- !u!1 &1585513955
 GameObject:
