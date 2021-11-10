@@ -107,6 +107,26 @@ public static class BugWatchSettings
     private static readonly string _PROGRESS = "Progress";
     private static readonly string _PROGRESS_HAS_GAME = string.Format("{0}.HasGame", _PROGRESS);
     private static readonly string _PROGRESS_LEVEL = string.Format("{0}.Level", _PROGRESS);
+    private static readonly string _PROGRESS_DISTRICT = string.Format("{0}.District", _PROGRESS);
+
+    public static string District
+    {
+        get
+        {
+            return PlayerPrefs.GetString(_PROGRESS_DISTRICT, "Start");
+        }
+
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                PlayerPrefs.DeleteKey(_PROGRESS_DISTRICT);
+            } else
+            {
+                PlayerPrefs.SetString(_PROGRESS_DISTRICT, value);
+            }
+        }
+    }
     public static bool HasProgress
     {
         get

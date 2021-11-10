@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     
     MovementControl playerControls;
 
+    bool useGravity = true;
     bool ready = false;
     float mouseYDirection = 1;
 
@@ -93,11 +94,12 @@ public class PlayerController : MonoBehaviour
         OnLook(look);
         UpdateLookAt();
     }
-
+    const float _GRAVITY = 9.81f;
     public void OnMove(Vector2 input)
     {
-        var move = Vector3.ClampMagnitude(transform.forward * input.y + transform.right * input.x, 1);
-        _controller.Move(move * speed * Time.deltaTime);
+        var move = Vector3.ClampMagnitude(transform.forward * input.y + transform.right * input.x, 1) * speed;
+        if (!_controller.isGrounded && useGravity) move.y -= _GRAVITY;
+        _controller.Move(move * Time.deltaTime);
     }
 
     public void OnLook(Vector2 lookVector)

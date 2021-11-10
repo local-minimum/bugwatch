@@ -7,6 +7,14 @@ public class UICaption : MonoBehaviour
 {   
     private static UICaption _instance { get; set; }
 
+    public static bool Ready
+    {
+        get
+        {
+            return _instance != null;
+        }
+    }
+
     public static void Show(string text)
     {
         _instance.ShowCaption(text);
@@ -16,6 +24,9 @@ public class UICaption : MonoBehaviour
     TMPro.TextMeshProUGUI caption;
 
     float wordsPerMinute = 200;
+
+    [SerializeField]
+    float extraTime = 1f;
 
     private void Awake()
     {
@@ -75,7 +86,7 @@ public class UICaption : MonoBehaviour
         caption.text = text;
         caption.enabled = true;
         var words = wordCountish(text);
-        yield return new WaitForSeconds(words * 60f / wordsPerMinute);
+        yield return new WaitForSeconds(words * 60f / wordsPerMinute + extraTime);
         if (caption.text == text)
         {
             caption.text = "";
