@@ -15,9 +15,9 @@ public class UICaption : MonoBehaviour
         }
     }
 
-    public static void Show(string text)
+    public static float Show(string text)
     {
-        _instance.ShowCaption(text);
+        return _instance.ShowCaption(text);
     }
 
     [SerializeField]
@@ -76,17 +76,21 @@ public class UICaption : MonoBehaviour
             .Sum();
     }
     
-    private void ShowCaption(string text)
+    private float ShowCaption(string text)
     {
-        StartCoroutine(_showCaption(text));
+        var words = wordCountish(text);
+        var duration = words * 60f / wordsPerMinute + extraTime;
+        StartCoroutine(_showCaption(text, duration));
+        return duration;
     }
 
-    private IEnumerator<WaitForSeconds> _showCaption(string text)
+    private IEnumerator<WaitForSeconds> _showCaption(string text, float duration)
     {
         caption.text = text;
         caption.enabled = true;
-        var words = wordCountish(text);
-        yield return new WaitForSeconds(words * 60f / wordsPerMinute + extraTime);
+        
+        yield return new WaitForSeconds(duration);
+
         if (caption.text == text)
         {
             caption.text = "";

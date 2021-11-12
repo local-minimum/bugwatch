@@ -21,6 +21,8 @@ public class Caption
 
     public PlayerProfile requirement;
     public PlayerProfile moodEffect;
+
+    public AudioClip narration;
 }
 
 public class StoryBit : MonoBehaviour
@@ -72,8 +74,10 @@ public class StoryBit : MonoBehaviour
             Debug.LogWarning(string.Format("Attempting to emit story {0}, but no bits stored", name));
             return;
         }
-        EmitCaption(UnusedCaptions().FirstOrDefault());
-
+        if (!EmitCaption(UnusedCaptions().FirstOrDefault()))
+        {
+            Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left", name));
+        }
     }
 
     public void EmitStory(string context)
@@ -83,23 +87,35 @@ public class StoryBit : MonoBehaviour
             Debug.LogWarning(string.Format("Attempting to emit story {0} (context {1}), but no bits stored", name, context));
             return;
         }
-        EmitCaption(UnusedCaptions().Where(c => c.context == context).FirstOrDefault());        
+        if (!EmitCaption(UnusedCaptions().Where(c => c.context == context).FirstOrDefault()))
+        {
+            Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left matching context {1}", name, context));
+        } 
     }
 
-    void EmitCaption(Caption caption)
+    bool EmitCaption(Caption caption)
     {
         if (caption != null)
         {
-            UICaption.Show(caption.text);
+            var duration = UICaption.Show(caption.text);
+            if (caption.narration)
+            {
+                PlayerInternalSpeaker.Speaker.PlayOneShot(caption.narration);
+            } else
+            {
+                PlayerInternalSpeaker.Mumble(duration);
+            }
+
             BugWatchSettings.UseStoryBit(story, caption.id);
             if (caption.moodEffect != null)
             {
                 PlayerProfile profile = BugWatchSettings.PlayerProfile.Evolve(caption.moodEffect);
                 BugWatchSettings.PlayerProfile = profile;
             }
+            return true;
         } else
         {
-            Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left matching requirements", name));
+            return false;           
         }
     }
 }

@@ -270,10 +270,8 @@ public static class BugWatchSettings
 
         set
         {
-            IList<(PlayerProfileMood, int)> list = (IList<(PlayerProfileMood, int)>)value.AsSequence();
-            for (int i = 0, l = list.Count; i < l; i++)
-            {
-                var (mood, moodValue) = list[i];
+            foreach(var (mood, moodValue) in value.AsSequence())
+            { 
                 SetProfileMood(mood, moodValue);
             }
         }

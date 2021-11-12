@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerProfileMood { Taciturn, Quirky, Entusiast, Sad };
+public enum PlayerProfileMood { Taciturn, Quirky, Entusiast, Sad, Parasitized };
 
 [System.Serializable]
 public class PlayerProfile {
@@ -10,13 +10,15 @@ public class PlayerProfile {
     public int Quirky;
     public int Enthusiast;
     public int Sad;
+    public int Parasitized;
 
-    public PlayerProfile(int taciturn, int quirky, int enthusiast, int sad)
+    public PlayerProfile(int taciturn, int quirky, int enthusiast, int sad, int parasitized)
     {
         Taciturn = taciturn;
         Quirky = quirky;
         Enthusiast = enthusiast;
         Sad = sad;
+        Parasitized = parasitized;
     }
 
     public PlayerProfile(System.Func<PlayerProfileMood, int> moodLoader)
@@ -25,6 +27,7 @@ public class PlayerProfile {
         Quirky = moodLoader(PlayerProfileMood.Quirky);
         Enthusiast = moodLoader(PlayerProfileMood.Entusiast);
         Sad = moodLoader(PlayerProfileMood.Sad);
+        Parasitized = moodLoader(PlayerProfileMood.Parasitized);
     }
 
     public PlayerProfile Evolve(PlayerProfile other)
@@ -33,7 +36,8 @@ public class PlayerProfile {
             Mathf.Max(0, Taciturn + other.Taciturn),
             Mathf.Max(0, Quirky + other.Quirky),
             Mathf.Max(0, Enthusiast + other.Enthusiast),
-            Mathf.Max(0, Sad + other.Sad)
+            Mathf.Max(0, Sad + other.Sad),
+            Mathf.Max(0, Parasitized + other.Parasitized)
         );
     }
 
@@ -43,7 +47,8 @@ public class PlayerProfile {
             || Taciturn >= requirement.Taciturn
             && Quirky >= requirement.Quirky
             && Enthusiast >= requirement.Enthusiast
-            && Sad >= requirement.Sad;
+            && Sad >= requirement.Sad
+            && Parasitized >= requirement.Parasitized;
     }
 
     public int GetMoodValue(PlayerProfileMood mood)
@@ -58,6 +63,8 @@ public class PlayerProfile {
                 return Sad;
             case PlayerProfileMood.Taciturn:
                 return Taciturn;
+            case PlayerProfileMood.Parasitized:
+                return Parasitized;
             default:
                 Debug.LogError(string.Format("{0} not implemented as value", mood));
                 return 0;

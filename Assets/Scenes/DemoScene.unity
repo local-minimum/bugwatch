@@ -156,6 +156,20 @@ MonoBehaviour:
   captions:
   - id: nope
     text: Nope, that  seems to be a scary void.
+    context: 
+    requirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    moodEffect:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    narration: {fileID: 0}
 --- !u!4 &77172716
 Transform:
   m_ObjectHideFlags: 0
@@ -245,8 +259,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   story: 0
   captions:
-  - id: no touch
+  - id: 
     text: No touching that with my bare hands!
+    context: 
+    requirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    moodEffect:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    narration: {fileID: 0}
 --- !u!1 &318180770
 GameObject:
   m_ObjectHideFlags: 0
