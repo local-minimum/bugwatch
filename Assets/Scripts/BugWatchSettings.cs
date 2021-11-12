@@ -35,7 +35,7 @@ public static class BugWatchSettings
             }
         }
     }
-    private static void _ResetEnum<T>(System.Func<T, string> keyMaker, T e) where T: System.Enum
+    private static void _ResetEnum<T>(System.Func<T, string> keyMaker, T e) where T : System.Enum
     {
         foreach (T collectable in System.Enum.GetValues(e.GetType()))
         {
@@ -87,7 +87,7 @@ public static class BugWatchSettings
     #region INVENTORY
     private static readonly string _INVENTORY = "Inventory";
 
-    private static string CollectableKey(CollectableType collectable) => string.Format("{0}.{1}", _INVENTORY, collectable.ToString());    
+    private static string CollectableKey(CollectableType collectable) => string.Format("{0}.{1}", _INVENTORY, collectable.ToString());
     public static bool HasPickedUp(CollectableType collectable) => PlayerPrefs.HasKey(CollectableKey(collectable));
 
     public static void PickUp(CollectableType collectable)
@@ -147,10 +147,11 @@ public static class BugWatchSettings
     public static void NewGame()
     {
         ResetProgress();
+        ResetProfile();
         ResetInventory();
         ResetSightings();
         ResetStories();
-        PlayerPrefs.SetInt(_PROGRESS_HAS_GAME, 42);        
+        PlayerPrefs.SetInt(_PROGRESS_HAS_GAME, 42);
     }
     #endregion
 
@@ -230,14 +231,58 @@ public static class BugWatchSettings
             {
                 PlayerPrefs.SetString(StoryKey(story), string.Join(",", bits.Concat(new string[1] { id })));
             }
-            
+
         }
+    }
+
+    public static void ResetStoryBit(Story story)
+    {
+        PlayerPrefs.DeleteKey(StoryKey(story));
     }
 
     public static void ResetStories()
     {
         _ResetSection(_STORY);
         _ResetEnum(StoryKey, Story.RatPickup);
+    }
+    #endregion
+
+    #region PROFILE
+    private static readonly string _PROFILE = "Profile";
+    private static readonly string _PROFILE_MOOD = string.Format("{0}.Mood", _PROFILE);
+
+    private static string ProfileMoodKey(PlayerProfileMood mood) => string.Format("{0}.{1}", _PROFILE_MOOD, mood.ToString());
+
+    public static void SetProfileMood(PlayerProfileMood mood, int value)
+    {
+        PlayerPrefs.SetInt(ProfileMoodKey(mood), value);
+    }
+
+    public static int GetProfileMood(PlayerProfileMood mood)
+    {
+        return PlayerPrefs.GetInt(ProfileMoodKey(mood), 0);
+    }
+
+    public static PlayerProfile PlayerProfile {
+        get {
+            return new PlayerProfile(GetProfileMood);
+        }
+
+        set
+        {
+            IList<(PlayerProfileMood, int)> list = (IList<(PlayerProfileMood, int)>)value.AsSequence();
+            for (int i = 0, l = list.Count; i < l; i++)
+            {
+                var (mood, moodValue) = list[i];
+                SetProfileMood(mood, moodValue);
+            }
+        }
+    }
+
+    public static void ResetProfile()
+    {
+        _ResetSection(_PROFILE);
+        _ResetEnum(ProfileMoodKey, PlayerProfileMood.Entusiast);
     }
     #endregion
 }

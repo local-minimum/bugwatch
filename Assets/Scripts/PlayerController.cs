@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     float viewDistance = 200;
     
     MovementControl playerControls;
-
+    
     bool useGravity = true;
     bool ready = false;
     float mouseYDirection = 1;
