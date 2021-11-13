@@ -15,9 +15,9 @@ public class UICaption : MonoBehaviour
         }
     }
 
-    public static float Show(string text)
+    public static float Show(string text, float minDuration)
     {
-        return _instance.ShowCaption(text);
+        return _instance.ShowCaption(text, minDuration);
     }
 
     [SerializeField]
@@ -76,10 +76,10 @@ public class UICaption : MonoBehaviour
             .Sum();
     }
     
-    private float ShowCaption(string text)
+    private float ShowCaption(string text, float minDuration)
     {
         var words = wordCountish(text);
-        var duration = words * 60f / wordsPerMinute + extraTime;
+        var duration = Mathf.Max(words * 60f / wordsPerMinute + extraTime, minDuration);
         StartCoroutine(_showCaption(text, duration));
         return duration;
     }

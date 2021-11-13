@@ -10,19 +10,36 @@ public enum Story
     RatRefuse,
 }
 
+enum Prioritized { Caption, Dialogue, None };
+
 [System.Serializable]
 public class Caption
 {
-    [Tooltip("No ID means it is repeatable")]
+    [Tooltip("No ID means it is repeatable.")]
     public string id;
     public string text;
     [Tooltip("If dialogue is useful only in particular context such as lacking a certain collectable.")]
     public string context;
+    public int priority;
 
     public PlayerProfile requirement;
+    public PlayerProfile maxRequirement;
     public PlayerProfile moodEffect;
 
     public AudioClip narration;
+}
+
+[System.Serializable]
+public class Dialogue
+{
+    [Tooltip("No ID means it is repeatable. Note ID of contained captions irrelevant.")]
+    public string id;
+    public string intro;
+    public int priority;
+    public string context;
+    public Caption[] options;
+    public PlayerProfile requirement;
+    public PlayerProfile maxRequirement;
 }
 
 public class StoryBit : MonoBehaviour
@@ -32,6 +49,9 @@ public class StoryBit : MonoBehaviour
 
     [SerializeField]
     Caption[] captions;
+
+    [SerializeField]
+    Dialogue[] dialogues;
 
     private static Dictionary<Story, StoryBit> storyBits = new Dictionary<Story, StoryBit>();
 
@@ -64,40 +84,99 @@ public class StoryBit : MonoBehaviour
         var used = BugWatchSettings.UsedStoryBits(story);
         var playerProfile = BugWatchSettings.PlayerProfile;
         return captions
-            .Where(c => !used.Contains(c.id) && playerProfile.MatchesRequirement(c.requirement));
+            .Where(c => !used.Contains(c.id) 
+                && playerProfile.MatchesRequirement(c.requirement)
+                && playerProfile.MatchesMaxRuirement(c.maxRequirement))
+            .OrderBy(c =>c.priority);
+    }
+
+    private IEnumerable<Dialogue> UnusedDialogues()
+    {
+        var used = BugWatchSettings.UsedStoryBits(story);
+        var playerProfile = BugWatchSettings.PlayerProfile;
+        return dialogues
+            .Where(d => !used.Contains(d.id)
+                && playerProfile.MatchesRequirement(d.requirement)
+                && playerProfile.MatchesMaxRuirement(d.maxRequirement))
+            .OrderBy(d => d.priority);
+    }
+
+    private Prioritized Priority(Caption caption, Dialogue dialogue)
+    {
+        if (caption != null && dialogue == null || caption.priority < dialogue.priority)
+        {
+            return Prioritized.Caption;
+        } else if (dialogue != null)
+        {
+            return Prioritized.Dialogue;
+        }
+        return Prioritized.None;
     }
 
     public void EmitStory()
     {
-        if (captions.Length == 0)
+        if (captions.Length == 0 && dialogues.Length == 0)
         {
             Debug.LogWarning(string.Format("Attempting to emit story {0}, but no bits stored", name));
             return;
         }
-        if (!EmitCaption(UnusedCaptions().FirstOrDefault()))
+        var caption = UnusedCaptions().FirstOrDefault();
+        var dialogue = UnusedDialogues().FirstOrDefault();
+        switch (Priority(caption, dialogue))
         {
-            Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left", name));
+            case Prioritized.Caption:
+                if (!EmitCaption(caption))
+                {
+                    Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left", name));
+                }
+                break;
+            case Prioritized.Dialogue:
+                if (!EmitDialogue(dialogue))
+                {
+                    Debug.LogWarning(string.Format("{0} attempt to emit a dialogue but non left", name));
+                }
+
+                break;
+            case Prioritized.None:
+                Debug.LogWarning(string.Format("{0} exhausted story bit", name));
+                break;
         }
     }
 
     public void EmitStory(string context)
     {
-        if (captions.Length == 0)
+        if (captions.Length == 0 && dialogues.Length == 0)
         {
             Debug.LogWarning(string.Format("Attempting to emit story {0} (context {1}), but no bits stored", name, context));
             return;
         }
-        if (!EmitCaption(UnusedCaptions().Where(c => c.context == context).FirstOrDefault()))
+        var caption = UnusedCaptions().Where(c => c.context == context).FirstOrDefault();
+        var dialogue = UnusedDialogues().Where(d => d.context == context).FirstOrDefault();
+        switch (Priority(caption, dialogue))
         {
-            Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left matching context {1}", name, context));
-        } 
+            case Prioritized.Caption:
+                if (!EmitCaption(caption))
+                {
+                    Debug.LogWarning(string.Format("{0} attempted to emit a caption but non left matching context {1}", name, context));
+                }
+                break;
+            case Prioritized.Dialogue:
+                if (!EmitDialogue(dialogue))
+                {
+                    Debug.LogWarning(string.Format("{0} attempt to emit a dialogue but non left matching context {1}", name, context));
+                }
+                break;
+            case Prioritized.None:
+                Debug.LogWarning(string.Format("{0} exhausted story bit", name));
+                break;
+        }
     }
 
     bool EmitCaption(Caption caption)
     {
         if (caption != null)
         {
-            var duration = UICaption.Show(caption.text);
+            var duration = UICaption.Show(caption.text, caption?.narration.length ?? 0);
             if (caption.narration)
             {
                 PlayerInternalSpeaker.Speaker.PlayOneShot(caption.narration);
@@ -116,6 +195,17 @@ public class StoryBit : MonoBehaviour
         } else
         {
             return false;           
+        }
+    }
+
+    bool EmitDialogue(Dialogue dialogue)
+    {
+        if (dialogue != null)
+        {            
+            return true;
+        } else
+        {
+            return false;
         }
     }
 }

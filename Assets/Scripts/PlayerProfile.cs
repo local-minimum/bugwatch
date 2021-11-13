@@ -51,6 +51,16 @@ public class PlayerProfile {
             && Parasitized >= requirement.Parasitized;
     }
 
+    public bool MatchesMaxRuirement(PlayerProfile maxRequirement)
+    {
+        return maxRequirement == null
+            || (Taciturn <= maxRequirement.Taciturn || maxRequirement.Taciturn < 0)
+            && (Quirky <= maxRequirement.Quirky || maxRequirement.Quirky < 0)
+            && (Enthusiast <= maxRequirement.Enthusiast || maxRequirement.Enthusiast < 0)
+            && (Sad <= maxRequirement.Sad || maxRequirement.Sad < 0)
+            && (Parasitized <= maxRequirement.Parasitized || maxRequirement.Parasitized < 0);
+    }
+
     public int GetMoodValue(PlayerProfileMood mood)
     {
         switch (mood)
