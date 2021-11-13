@@ -12,34 +12,51 @@ public enum Story
 
 enum Prioritized { Caption, Dialogue, None };
 
-[System.Serializable]
-public class Caption
+public abstract class CaptionDialogue
 {
     [Tooltip("No ID means it is repeatable.")]
     public string id;
-    public string text;
     [Tooltip("If dialogue is useful only in particular context such as lacking a certain collectable.")]
     public string context;
     public int priority;
 
     public PlayerProfile requirement;
     public PlayerProfile maxRequirement;
-    public PlayerProfile moodEffect;
 
+    public string text;
     public AudioClip narration;
+
 }
 
 [System.Serializable]
-public class Dialogue
+public class Caption : CaptionDialogue
 {
-    [Tooltip("No ID means it is repeatable. Note ID of contained captions irrelevant.")]
-    public string id;
-    public string intro;
-    public int priority;
-    public string context;
-    public Caption[] options;
-    public PlayerProfile requirement;
-    public PlayerProfile maxRequirement;
+    public PlayerProfile moodEffect;
+    [Tooltip("Only useful in dialogue options")]
+    public string shortText;
+}
+
+[System.Serializable]
+public class Dialogue : CaptionDialogue
+{    
+    public List<Caption> options = new List<Caption>();
+
+    public (Caption, Caption) GetOptions()
+    {
+        PlayerProfile profile = BugWatchSettings.PlayerProfile;
+        var selected = options
+            .Where(o => profile.MatchesRequirement(o.requirement)
+                && profile.MatchesMaxRuirement(o.maxRequirement))
+            .OrderBy(o => o.priority)
+            .Take(2)
+            .ToArray();
+
+        if (selected.Length < 2)
+        {
+            return (null, null);
+        }
+        else return (selected[0], selected[1]);
+    }
 }
 
 public class StoryBit : MonoBehaviour
@@ -111,7 +128,7 @@ public class StoryBit : MonoBehaviour
 
     private Prioritized Priority(Caption caption, Dialogue dialogue)
     {
-        if (caption != null && dialogue == null || caption.priority < dialogue.priority)
+        if (caption != null && (dialogue == null || caption.priority < dialogue.priority))
         {
             return Prioritized.Caption;
         } else if (dialogue != null)
@@ -184,15 +201,7 @@ public class StoryBit : MonoBehaviour
     {
         if (caption != null)
         {
-            var duration = UICaption.Show(caption.text, caption.narration == null ? 0f : caption.narration.length);
-            if (caption.narration)
-            {
-                PlayerInternalSpeaker.Speaker.PlayOneShot(caption.narration);
-            } else
-            {
-                PlayerInternalSpeaker.Mumble(duration);
-            }
-
+            UICaption.Show(caption.text, caption.narration);
             BugWatchSettings.UseStoryBit(story, caption.id);
             if (caption.moodEffect != null)
             {
@@ -210,7 +219,14 @@ public class StoryBit : MonoBehaviour
     {
         if (dialogue != null)
         {
-            PlayerController.Pause = true;
+            var (left, right) = dialogue.GetOptions();
+            UIDialogue.Show(new RealizedDialogue(
+                dialogue.text,
+                dialogue.narration,
+                new RealizedDialogueOption(left),
+                new RealizedDialogueOption(right)
+            ));
+            BugWatchSettings.UseStoryBit(story, dialogue.id);
             return true;
         } else
         {

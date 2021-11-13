@@ -15,9 +15,28 @@ public class UICaption : MonoBehaviour
         }
     }
 
-    public static float Show(string text, float minDuration)
+    public static float Show(string text, AudioClip narration)
     {
-        return _instance.ShowCaption(text, minDuration);
+        var duration = TextDuration(text, narration == null ? 0 : narration.length);
+        if (narration)
+        {
+            PlayerInternalSpeaker.Speaker.PlayOneShot(narration);
+        }
+        else
+        {
+            PlayerInternalSpeaker.Mumble(duration);
+        }
+        return _instance.ShowCaption(text, duration);
+    }
+
+    public static float Show(string text)
+    {
+        return _instance.ShowCaption(text, 0);
+    }
+
+    public static void Clear()
+    {
+        _instance.ClearCaption();
     }
 
     [SerializeField]
@@ -66,7 +85,7 @@ public class UICaption : MonoBehaviour
         BugWatchSettings.OnChangeFloatSetting -= BugWatchSettings_OnChangeFloatSetting;
     }
 
-    private float wordCountish(string text)
+    private static float WordCountish(string text)
     {
         return text
             .Split(' ')
@@ -76,12 +95,23 @@ public class UICaption : MonoBehaviour
             .Sum();
     }
     
+    public static float TextDuration(string text, float minDuration)
+    {
+        var words = WordCountish(text);
+        return Mathf.Max(words * 60f / _instance.wordsPerMinute + _instance.extraTime, minDuration);
+    }
+
     private float ShowCaption(string text, float minDuration)
     {
-        var words = wordCountish(text);
-        var duration = Mathf.Max(words * 60f / wordsPerMinute + extraTime, minDuration);
+        var duration = TextDuration(text, minDuration);
         StartCoroutine(_showCaption(text, duration));
         return duration;
+    }
+
+    private void ClearCaption()
+    {
+        caption.text = "";
+        caption.enabled = false;
     }
 
     private IEnumerator<WaitForSeconds> _showCaption(string text, float duration)
@@ -93,8 +123,7 @@ public class UICaption : MonoBehaviour
 
         if (caption.text == text)
         {
-            caption.text = "";
-            caption.enabled = false;
+            ClearCaption();
         }
     }
 }

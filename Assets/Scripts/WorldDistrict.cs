@@ -61,7 +61,7 @@ public class WorldDistrict : MonoBehaviour
             {
                 if (UICaption.Ready)
                 {
-                    UICaption.Show(districtName, 0);
+                    UICaption.Show(districtName);
                 } else
                 {
                     StartCoroutine(DelayShowText(districtName));
@@ -76,7 +76,7 @@ public class WorldDistrict : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
         }
-        UICaption.Show(text, 0);
+        UICaption.Show(text);
     }
 
     private void OnDestroy()

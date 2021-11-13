@@ -155,7 +155,6 @@ MonoBehaviour:
   story: 0
   captions:
   - id: nope
-    text: Nope, that  seems to be a scary void.
     context: 
     priority: 0
     requirement:
@@ -170,13 +169,15 @@ MonoBehaviour:
       Enthusiast: 0
       Sad: 0
       Parasitized: 0
+    text: Nope, that  seems to be a scary void.
+    narration: {fileID: 0}
     moodEffect:
       Taciturn: 0
       Quirky: 0
       Enthusiast: 0
       Sad: 0
       Parasitized: 0
-    narration: {fileID: 0}
+    shortText: 
   dialogues: []
 --- !u!4 &77172716
 Transform:
@@ -268,7 +269,6 @@ MonoBehaviour:
   story: 0
   captions:
   - id: 
-    text: No touching that with my bare hands!
     context: 
     priority: 0
     requirement:
@@ -283,13 +283,15 @@ MonoBehaviour:
       Enthusiast: 0
       Sad: 0
       Parasitized: 0
+    text: No touching that with my bare hands!
+    narration: {fileID: 0}
     moodEffect:
       Taciturn: 0
       Quirky: 0
       Enthusiast: 0
       Sad: 0
       Parasitized: 0
-    narration: {fileID: 0}
+    shortText: 
   dialogues: []
 --- !u!1 &318180770
 GameObject:
@@ -491,7 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPosition: {fileID: 135582087}
-  districtId: Not start
+  districtId: Start
   districtName: Fancy place
 --- !u!1 &502324909
 GameObject:
@@ -1010,7 +1012,31 @@ MonoBehaviour:
   story: 0
   captions:
   - id: 
+    context: 
+    priority: 1
+    requirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    maxRequirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
     text: Hello
+    narration: {fileID: 0}
+    moodEffect:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    shortText: 
+  dialogues:
+  - id: welcome
     context: 
     priority: 0
     requirement:
@@ -1025,14 +1051,57 @@ MonoBehaviour:
       Enthusiast: 0
       Sad: 0
       Parasitized: 0
-    moodEffect:
-      Taciturn: 0
-      Quirky: 0
-      Enthusiast: 0
-      Sad: 0
-      Parasitized: 0
+    text: This is your first attempt to steer your future.
     narration: {fileID: 0}
-  dialogues: []
+    options:
+    - id: 
+      context: 
+      priority: 0
+      requirement:
+        Taciturn: 0
+        Quirky: 0
+        Enthusiast: 0
+        Sad: 0
+        Parasitized: 0
+      maxRequirement:
+        Taciturn: 0
+        Quirky: 0
+        Enthusiast: 0
+        Sad: 0
+        Parasitized: 0
+      text: I feel like I've been born right this moment. Fresh and pure.
+      narration: {fileID: 0}
+      moodEffect:
+        Taciturn: 0
+        Quirky: 0
+        Enthusiast: 0
+        Sad: 0
+        Parasitized: 0
+      shortText: I feel like I've been born
+    - id: 
+      context: 
+      priority: 0
+      requirement:
+        Taciturn: 0
+        Quirky: 0
+        Enthusiast: 0
+        Sad: 0
+        Parasitized: 0
+      maxRequirement:
+        Taciturn: 0
+        Quirky: 0
+        Enthusiast: 0
+        Sad: 0
+        Parasitized: 0
+      text: I've always decided for myself. I'm wise and old.
+      narration: {fileID: 0}
+      moodEffect:
+        Taciturn: 0
+        Quirky: 0
+        Enthusiast: 0
+        Sad: 0
+        Parasitized: 0
+      shortText: I've always decided.
 --- !u!4 &1822125482
 Transform:
   m_ObjectHideFlags: 0
