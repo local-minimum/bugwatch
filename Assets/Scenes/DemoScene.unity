@@ -157,7 +157,14 @@ MonoBehaviour:
   - id: nope
     text: Nope, that  seems to be a scary void.
     context: 
+    priority: 0
     requirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    maxRequirement:
       Taciturn: 0
       Quirky: 0
       Enthusiast: 0
@@ -170,6 +177,7 @@ MonoBehaviour:
       Sad: 0
       Parasitized: 0
     narration: {fileID: 0}
+  dialogues: []
 --- !u!4 &77172716
 Transform:
   m_ObjectHideFlags: 0
@@ -262,7 +270,14 @@ MonoBehaviour:
   - id: 
     text: No touching that with my bare hands!
     context: 
+    priority: 0
     requirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    maxRequirement:
       Taciturn: 0
       Quirky: 0
       Enthusiast: 0
@@ -275,6 +290,7 @@ MonoBehaviour:
       Sad: 0
       Parasitized: 0
     narration: {fileID: 0}
+  dialogues: []
 --- !u!1 &318180770
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,6 +821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   story: 0
   captions: []
+  dialogues: []
 --- !u!1 &1585513955
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,3 +951,99 @@ MonoBehaviour:
   requiredCollectable: 0
   refuseStory: {fileID: 0}
   pickupStory: {fileID: 0}
+--- !u!1 &1822125478
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1822125482}
+  - component: {fileID: 1822125481}
+  - component: {fileID: 1822125480}
+  - component: {fileID: 1822125479}
+  m_Layer: 0
+  m_Name: EventTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1822125479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822125478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8436b801ef9aeab449cc266e8ea5cb87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1822125480
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822125478}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1822125481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822125478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d2c896d20c28943afe8bd3f00db11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  story: 0
+  captions:
+  - id: 
+    text: Hello
+    context: 
+    priority: 0
+    requirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    maxRequirement:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    moodEffect:
+      Taciturn: 0
+      Quirky: 0
+      Enthusiast: 0
+      Sad: 0
+      Parasitized: 0
+    narration: {fileID: 0}
+  dialogues: []
+--- !u!4 &1822125482
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822125478}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 99.95, y: 2.94, z: 111.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

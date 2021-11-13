@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     {
         set { instance.Paused = value; }
     }
+
     [SerializeField, Range(1, 15)]
     float speed = 3.5f;
     private CharacterController _controller;

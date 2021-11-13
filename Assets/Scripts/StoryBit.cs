@@ -48,10 +48,10 @@ public class StoryBit : MonoBehaviour
     Story story;
 
     [SerializeField]
-    Caption[] captions;
+    List<Caption> captions = new List<Caption>();
 
     [SerializeField]
-    Dialogue[] dialogues;
+    List<Dialogue> dialogues = new List<Dialogue>();
 
     private static Dictionary<Story, StoryBit> storyBits = new Dictionary<Story, StoryBit>();
 
@@ -101,6 +101,14 @@ public class StoryBit : MonoBehaviour
             .OrderBy(d => d.priority);
     }
 
+    private bool StoryLess
+    {
+        get
+        {
+            return captions.Count == 0 && dialogues.Count == 0;
+        }
+    }
+
     private Prioritized Priority(Caption caption, Dialogue dialogue)
     {
         if (caption != null && dialogue == null || caption.priority < dialogue.priority)
@@ -115,7 +123,7 @@ public class StoryBit : MonoBehaviour
 
     public void EmitStory()
     {
-        if (captions.Length == 0 && dialogues.Length == 0)
+        if (StoryLess)
         {
             Debug.LogWarning(string.Format("Attempting to emit story {0}, but no bits stored", name));
             return;
@@ -145,7 +153,7 @@ public class StoryBit : MonoBehaviour
 
     public void EmitStory(string context)
     {
-        if (captions.Length == 0 && dialogues.Length == 0)
+        if (StoryLess)
         {
             Debug.LogWarning(string.Format("Attempting to emit story {0} (context {1}), but no bits stored", name, context));
             return;
@@ -176,7 +184,7 @@ public class StoryBit : MonoBehaviour
     {
         if (caption != null)
         {
-            var duration = UICaption.Show(caption.text, caption?.narration.length ?? 0);
+            var duration = UICaption.Show(caption.text, caption.narration == null ? 0f : caption.narration.length);
             if (caption.narration)
             {
                 PlayerInternalSpeaker.Speaker.PlayOneShot(caption.narration);
