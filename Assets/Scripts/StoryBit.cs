@@ -201,7 +201,8 @@ public class StoryBit : MonoBehaviour
     bool EmitDialogue(Dialogue dialogue)
     {
         if (dialogue != null)
-        {            
+        {
+            PlayerController.Pause = true;
             return true;
         } else
         {

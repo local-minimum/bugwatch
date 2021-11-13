@@ -6,6 +6,12 @@ using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController instance { get; set; }
+
+    public static bool Pause
+    {
+        set { instance.Paused = value; }
+    }
     [SerializeField, Range(1, 15)]
     float speed = 3.5f;
     private CharacterController _controller;
@@ -22,18 +28,39 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Range(10, 1000)]
     float viewDistance = 200;
-    
+
     MovementControl playerControls;
-    
+
     bool useGravity = true;
     bool ready = false;
     float mouseYDirection = 1;
 
+    public bool Paused
+    {
+        set
+        {
+            ready = !value;
+            if (value)
+            {
+                CleanUIPointer(UIPointerMode.None);
+            }            
+        }
+    }
     private void Awake()
     {
-        _controller = GetComponent<CharacterController>();
-        playerControls = new MovementControl();
-        mouseYDirection = BugWatchSettings.MouseYDirectionInverted ? -1 : 1;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        if (instance != this)
+        {
+            Destroy(gameObject);
+        } else
+        {
+            _controller = GetComponent<CharacterController>();
+            playerControls = new MovementControl();
+            mouseYDirection = BugWatchSettings.MouseYDirectionInverted ? -1 : 1;
+        }
     }
 
     private void Start()
@@ -80,7 +107,12 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         ready = true;
-        UIPointer.Mode = UIPointerMode.Default;
+        CleanUIPointer(UIPointerMode.Default);
+    }
+
+    void CleanUIPointer(UIPointerMode mode)
+    {
+        UIPointer.Mode = mode;
         UIPointer.Verb = null;
         UIPointer.VerbKey = null;
     }
@@ -155,21 +187,21 @@ public class PlayerController : MonoBehaviour
                 }
             } else
             {
-                UIPointer.Mode = UIPointerMode.Default;
-                UIPointer.Verb = null;
-                UIPointer.VerbKey = null;
+                CleanUIPointer(UIPointerMode.Default);
                 this.interactable = null;
             }
         } else
         {
-            UIPointer.Mode = UIPointerMode.Default;
-            UIPointer.Verb = null;
-            UIPointer.VerbKey = null;
+            CleanUIPointer(UIPointerMode.Default);
         }
     }
 
     private void OnDestroy()
     {
+        if (instance == this)
+        {
+            instance = null;
+        }
         SceneManager.UnloadSceneAsync("GameUI");
         BugWatchSettings.OnChangeBoolSetting -= BugWatchSettings_OnChangeBoolSetting;
     }
