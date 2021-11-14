@@ -47,7 +47,7 @@ public class RealizedDialogue
 {
     public RealizedDialogueOption leftOption;
     public RealizedDialogueOption rightOption;
-    public RealizedDialogueOption nonAction;
+    public RealizedDialogueOption indecisiveOption;
     public string intro;
     public AudioClip introNarration;
 
@@ -56,14 +56,14 @@ public class RealizedDialogue
         AudioClip introNarration,
         RealizedDialogueOption leftOption,
         RealizedDialogueOption rightOption,
-        RealizedDialogueOption nonAction
+        RealizedDialogueOption indecisiveOption
     )
     {
         this.intro = intro;
         this.introNarration = introNarration;
         this.leftOption = leftOption;
         this.rightOption = rightOption;
-        this.nonAction = nonAction;
+        this.indecisiveOption = indecisiveOption;
     }
 }
 
@@ -222,7 +222,7 @@ public class UIDialogue : MonoBehaviour
         
         if (activeDialogue != null)
         {
-            Enact(activeDialogue.nonAction);
+            Enact(activeDialogue.indecisiveOption);
             ExitDialogue();
         }
     }

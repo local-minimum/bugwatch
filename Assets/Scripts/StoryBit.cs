@@ -40,7 +40,7 @@ public class Caption : CaptionDialogue
 public class Dialogue : CaptionDialogue
 {    
     public List<Caption> options = new List<Caption>();
-    public List<Caption> nonActions = new List<Caption>();
+    public List<Caption> indecisiveOptions = new List<Caption>();
 
     public (Caption, Caption) GetOptions()
     {
@@ -221,7 +221,7 @@ public class StoryBit : MonoBehaviour
         if (dialogue != null)
         {
             var (left, right) = dialogue.GetOptions();
-            var noResponse = UnusedCaptions(dialogue.nonActions).FirstOrDefault();
+            var noResponse = UnusedCaptions(dialogue.indecisiveOptions).FirstOrDefault();
             UIDialogue.Show(new RealizedDialogue(
                 dialogue.text,
                 dialogue.narration,
