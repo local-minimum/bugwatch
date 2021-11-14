@@ -40,6 +40,7 @@ public class Caption : CaptionDialogue
 public class Dialogue : CaptionDialogue
 {    
     public List<Caption> options = new List<Caption>();
+    public List<Caption> nonActions = new List<Caption>();
 
     public (Caption, Caption) GetOptions()
     {
@@ -96,7 +97,7 @@ public class StoryBit : MonoBehaviour
         }
     }
 
-    private IEnumerable<Caption> UnusedCaptions()
+    private IEnumerable<Caption> UnusedCaptions(List<Caption> captions)
     {
         var used = BugWatchSettings.UsedStoryBits(story);
         var playerProfile = BugWatchSettings.PlayerProfile;
@@ -145,7 +146,7 @@ public class StoryBit : MonoBehaviour
             Debug.LogWarning(string.Format("Attempting to emit story {0}, but no bits stored", name));
             return;
         }
-        var caption = UnusedCaptions().FirstOrDefault();
+        var caption = UnusedCaptions(captions).FirstOrDefault();
         var dialogue = UnusedDialogues().FirstOrDefault();
         switch (Priority(caption, dialogue))
         {
@@ -175,7 +176,7 @@ public class StoryBit : MonoBehaviour
             Debug.LogWarning(string.Format("Attempting to emit story {0} (context {1}), but no bits stored", name, context));
             return;
         }
-        var caption = UnusedCaptions().Where(c => c.context == context).FirstOrDefault();
+        var caption = UnusedCaptions(captions).Where(c => c.context == context).FirstOrDefault();
         var dialogue = UnusedDialogues().Where(d => d.context == context).FirstOrDefault();
         switch (Priority(caption, dialogue))
         {
@@ -220,11 +221,13 @@ public class StoryBit : MonoBehaviour
         if (dialogue != null)
         {
             var (left, right) = dialogue.GetOptions();
+            var noResponse = UnusedCaptions(dialogue.nonActions).FirstOrDefault();
             UIDialogue.Show(new RealizedDialogue(
                 dialogue.text,
                 dialogue.narration,
                 new RealizedDialogueOption(left),
-                new RealizedDialogueOption(right)
+                new RealizedDialogueOption(right),
+                new RealizedDialogueOption(noResponse)
             ));
             BugWatchSettings.UseStoryBit(story, dialogue.id);
             return true;

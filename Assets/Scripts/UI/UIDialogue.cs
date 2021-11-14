@@ -47,6 +47,7 @@ public class RealizedDialogue
 {
     public RealizedDialogueOption leftOption;
     public RealizedDialogueOption rightOption;
+    public RealizedDialogueOption nonAction;
     public string intro;
     public AudioClip introNarration;
 
@@ -54,13 +55,15 @@ public class RealizedDialogue
         string intro,
         AudioClip introNarration,
         RealizedDialogueOption leftOption,
-        RealizedDialogueOption rightOption
+        RealizedDialogueOption rightOption,
+        RealizedDialogueOption nonAction
     )
     {
         this.intro = intro;
         this.introNarration = introNarration;
         this.leftOption = leftOption;
         this.rightOption = rightOption;
+        this.nonAction = nonAction;
     }
 }
 
@@ -106,6 +109,14 @@ public class UIDialogue : MonoBehaviour
         left.text = "";
         right.text = "";
         intro.text = "";
+    }
+
+    private void ExitDialogue()
+    {
+        Cursor.visible = false;
+        activeDialogue = null;
+        Visible = false;
+        PlayerController.Pause = false;
     }
 
     private bool Visible
@@ -211,11 +222,8 @@ public class UIDialogue : MonoBehaviour
         
         if (activeDialogue != null)
         {
-            Cursor.visible = false;
-            activeDialogue = null;
-            BugWatchSettings.SetProfileMood(PlayerProfileMood.Taciturn, BugWatchSettings.PlayerProfile.Taciturn + 1);
-            Visible = false;
-            PlayerController.Pause = false;
+            Enact(activeDialogue.nonAction);
+            ExitDialogue();
         }
     }
 
@@ -226,18 +234,19 @@ public class UIDialogue : MonoBehaviour
             switch (leftSide)
             {
                 case true:
-                    UICaption.Show(activeDialogue.leftOption.fullText, activeDialogue.leftOption.narration);
-                    activeDialogue.leftOption.UpdatePlayerProfile();
+                    Enact(activeDialogue.leftOption);
                     break;
                 case false:
-                    UICaption.Show(activeDialogue.rightOption.fullText, activeDialogue.rightOption.narration);
-                    activeDialogue.rightOption.UpdatePlayerProfile();
+                    Enact(activeDialogue.rightOption);
                     break;
             }
         }
-        Cursor.visible = false;
-        activeDialogue = null;
-        Visible = false;
-        PlayerController.Pause = false;
+        ExitDialogue();
+    }
+
+    public void Enact(RealizedDialogueOption option)
+    {
+        UICaption.Show(option.fullText, option.narration);
+        option.UpdatePlayerProfile();
     }
 }
