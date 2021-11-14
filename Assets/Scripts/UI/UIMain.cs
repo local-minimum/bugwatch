@@ -43,7 +43,7 @@ public class UIMain : MonoBehaviour
 
     public void OnSettings()
     {
-        Debug.LogError("Not implemented");
+        SceneManager.LoadScene("Settings");
     }
 
     public void OnQuit()

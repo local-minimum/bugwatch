@@ -198,7 +198,7 @@ public static class BugWatchSettings
         _ResetEnum(SightingKey, Sighting.Crawler);
     }
     #endregion
-
+    
     #region STORY
     private static readonly string _STORY = "Story";
 
