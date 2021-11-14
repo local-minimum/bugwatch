@@ -14,13 +14,24 @@ public class UISettings : MonoBehaviour
 
     private void Start()
     {
+        Sync();
+    }
+
+    private void Sync()
+    {
         invertedY.isOn = BugWatchSettings.MouseYDirectionInverted;
         readingSpeed.value = BugWatchSettings.WordsPerMinute;
     }
 
-    public void Back()
+    public void OnBack()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void OnReset()
+    {
+        BugWatchSettings.ResetControls();
+        Sync();
     }
 
     public void OnInvertedYMouse()

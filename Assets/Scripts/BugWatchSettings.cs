@@ -76,7 +76,7 @@ public static class BugWatchSettings
 
         set
         {
-            PlayerPrefs.SetFloat(_CONTROLS_MOUSE_Y_DIRECTION, value);
+            PlayerPrefs.SetFloat(_CONTROLS_WORDS_PER_MINUTE, value);
             OnChangeFloatSetting?.Invoke(GameSetting.WordsPerMinute, value);
         }
     }
