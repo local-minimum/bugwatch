@@ -41,12 +41,11 @@ public class Gate : MonoBehaviour
         }
         return anyDisabled;
     }
-
-    private void OnTriggerEnter(Collider other)
+    public void HandleTriggerEnter(Collider other)
     {
-        if (other.GetComponent<PlayerController>() != null)        
+        if (other.GetComponent<PlayerController>() != null)
         {
-            for (int i=0; i<requiredCollectables.Length; i++)
+            for (int i = 0; i < requiredCollectables.Length; i++)
             {
                 if (!BugWatchSettings.HasPickedUp(requiredCollectables[i]))
                 {
@@ -57,13 +56,20 @@ public class Gate : MonoBehaviour
             if (DisableColliders())
             {
                 HandleFirstEntry();
-            } else
+            }
+            else
             {
                 HandleEntry();
-            }            
-        } else
+            }
+        }
+        else
         {
             Debug.Log("Other " + other.name);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        HandleTriggerEnter(other);
     }
 }

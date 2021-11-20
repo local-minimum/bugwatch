@@ -139,7 +139,7 @@ public static class BugWatchSettings
     {
         get
         {
-            return PlayerPrefs.GetString(_PROGRESS_LEVEL, "Scenes/DemoScene");
+            return PlayerPrefs.GetString(_PROGRESS_LEVEL, "Scenes/Level");
         }
     }
 

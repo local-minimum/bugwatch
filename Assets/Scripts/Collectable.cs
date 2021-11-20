@@ -9,7 +9,9 @@ public enum CollectableType
     Rat,
     Gloves,
     Helmet,
-    Weapon
+    BaseballBat,
+    Flowers,
+    EnergyDrink
 };
 
 public class Collectable : MonoBehaviour

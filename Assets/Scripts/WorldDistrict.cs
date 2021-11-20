@@ -51,8 +51,8 @@ public class WorldDistrict : MonoBehaviour
             player.transform.rotation = spawnPosition.rotation;
         }
     }
-    
-    private void OnTriggerEnter(Collider other)
+
+    public void HandleTrigger(Collider other)
     {
         if (other.gameObject.GetComponent<PlayerController>() != null)
         {
@@ -62,12 +62,18 @@ public class WorldDistrict : MonoBehaviour
                 if (UICaption.Ready)
                 {
                     UICaption.Show(districtName);
-                } else
+                }
+                else
                 {
                     StartCoroutine(DelayShowText(districtName));
                 }
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        HandleTrigger(other);
     }
 
     private IEnumerator<WaitForSeconds> DelayShowText(string text)
