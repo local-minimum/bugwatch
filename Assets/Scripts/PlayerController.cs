@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
         Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
         if (Physics.Raycast(ray, out hit, viewDistance))
         {
-            var interactable = hit.collider.GetComponent<Interactable>();
+            var interactable = hit.collider.GetComponentInParent<Interactable>();
             if (interactable)
             {
                 var bindingKey = playerControls

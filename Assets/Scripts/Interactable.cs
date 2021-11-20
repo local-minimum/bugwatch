@@ -9,10 +9,10 @@ public class Interactable : MonoBehaviour
     public event ActivationEvent OnActivation;
 
     [SerializeField, Range(0, 100)]
-    private float maxDistanceNotice = 1f;
+    private float maxDistanceNotice = 3f;
 
     [SerializeField, Range(0, 100)]
-    private float maxDistanceActivate = 0.5f;
+    private float maxDistanceActivate = 1f;
 
     private bool live = true;
 
