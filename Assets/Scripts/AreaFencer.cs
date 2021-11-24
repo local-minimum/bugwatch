@@ -46,10 +46,10 @@ public class AreaFencer : MonoBehaviour
         {
             var fence = new Vector2(nextPoint.position.x - transform.position.x, nextPoint.position.z - transform.position.z);
             var player = new Vector2(other.transform.position.x - transform.position.x, other.transform.position.z - transform.position.z);
-            Debug.Log(fence);
-            Debug.Log(player);
+            //Debug.Log(fence);
+            //Debug.Log(player);
             var angle = Mathf.Atan2(fence.y, fence.x) - Mathf.Atan2(player.y, player.x);
-            Debug.Log(angle);
+            //Debug.Log(angle);
             if (angle > 0)
             {
                 district.HandleTrigger(other);
