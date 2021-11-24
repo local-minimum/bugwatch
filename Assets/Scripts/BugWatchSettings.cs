@@ -219,6 +219,7 @@ public static class BugWatchSettings
         _ResetSection(_SIGHTING);
         // Can be any of the enum values
         _ResetEnum(SightingKey, Sighting.Crawler);
+        _ResetEnum(SightingIdsKey, Sighting.Crawler);
     }
     #endregion
     
