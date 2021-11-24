@@ -57,6 +57,7 @@ public class BugSighting : MonoBehaviour
     {
         interactable.OnActivation += Interactable_OnActivation;
     }
+
     private void OnDisable()
     {
         if (interactable)
@@ -80,6 +81,9 @@ public class BugSighting : MonoBehaviour
         sightingStory?.EmitStory();
         interactable.Consume();
         BugWatchSettings.SetSightingType(sighting, sightingType, sightingId);
+        UIPointer.Mode = UIPointerMode.Default;
+        UIPointer.Verb = null;
+        UIPointer.VerbKey = null;
     }
 
     private void Interactable_OnActivation()
