@@ -158,6 +158,7 @@ public static class BugWatchSettings
     #region SIGHTINGS
     private static readonly string _SIGHTING = "Sighting";
     private static string SightingKey(Sighting sighting) => string.Format("{0}.{1}", _SIGHTING, sighting.ToString());
+    private static string SightingIdsKey(Sighting sighting) => string.Format("{0}.{1}.ConsumedIds", _SIGHTING, sighting.ToString());
 
     private static SightingType GetSightingType(Sighting sighting)
     {
@@ -170,6 +171,7 @@ public static class BugWatchSettings
         }
         return SightingType.None;
     }
+
     public static SightingType GetNextSightingType(Sighting sighting)
     {
         switch (GetSightingType(sighting))
@@ -185,10 +187,31 @@ public static class BugWatchSettings
         }
     }
 
-    public static void SetSightingType(Sighting sighting, SightingType sightingType)
+    static List<string> ConsumedIdsString(Sighting sighting)
+    {
+        var key = SightingIdsKey(sighting);
+        return PlayerPrefs.GetString(key, "").Split(',').ToList();
+    }
+
+    public static bool HasConsumedSighting(Sighting sighting, string sightingId)
+    {
+        return ConsumedIdsString(sighting).Contains(sightingId);
+    }
+
+    public static void SetSightingType(Sighting sighting, SightingType sightingType, string sightingId)
     {
         var key = SightingKey(sighting);
         PlayerPrefs.SetString(key, sightingType.ToString());
+
+        var ids = ConsumedIdsString(sighting);
+        if (ids.Contains(sightingId))
+        {
+            Debug.LogError(string.Format("Attempting setting id {0} for sighting {1}/{2} though already consumed.", sightingId, sighting, sightingType));
+        } else
+        {
+            ids.Add(sightingId);
+            PlayerPrefs.SetString(SightingIdsKey(sighting), string.Join(",", ids));
+        }
     }
 
     public static void ResetSightings()

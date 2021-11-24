@@ -9,6 +9,9 @@ public enum Sighting { Crawler, Skidder, Flyer };
 public class BugSighting : MonoBehaviour
 {
     [SerializeField]
+    string sightingId;
+
+    [SerializeField]
     SightingType[] sightingTypes;
 
     [SerializeField]
@@ -25,13 +28,28 @@ public class BugSighting : MonoBehaviour
     [SerializeField]
     StoryBit refuseStory;
 
+    bool SightingConsumed
+    {
+        get
+        {
+            return BugWatchSettings.HasConsumedSighting(sighting, sightingId);
+        }
+    }
+
     private void Awake()
     {
+        if (string.IsNullOrEmpty(sightingId))
+        {
+            Debug.LogError(string.Format("{0} does not have a sighting id!", name));
+        }
         interactable = GetComponent<Interactable>();
         if (interactable == null)
         {
-            Debug.LogError(string.Format("{0} wsa a bug sighting without interactable!", name));
+            Debug.LogError(string.Format("{0} was a bug sighting without interactable!", name));
             Destroy(gameObject);
+        } else if (SightingConsumed)
+        {
+            interactable.Consume();
         }
     }
 
@@ -57,16 +75,18 @@ public class BugSighting : MonoBehaviour
         refuseStory?.EmitStory(sightingType.ToString());
     }
 
-    void HandleSighting()
+    void HandleSighting(SightingType sightingType)
     {
         sightingStory?.EmitStory();
+        interactable.Consume();
+        BugWatchSettings.SetSightingType(sighting, sightingType, sightingId);
     }
 
     private void Interactable_OnActivation()
     {
-        var currentType = BugWatchSettings.GetNextSightingType(sighting);
-        if (sightingTypes.Any(s => s == currentType))
-        {
+        var currentType = BugWatchSettings.GetNextSightingType(sighting);               
+        if (!sightingTypes.Any(s => s == currentType))
+        {            
             HandleRefuseSighting(currentType);
             return;
         }
@@ -80,6 +100,6 @@ public class BugSighting : MonoBehaviour
             }
         }
 
-        HandleSighting();
+        HandleSighting(currentType);
     }
 }

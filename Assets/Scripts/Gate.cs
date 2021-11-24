@@ -64,7 +64,7 @@ public class Gate : MonoBehaviour
         }
         else
         {
-            Debug.Log("Other " + other.name);
+            // Debug.Log("Other " + other.name);
         }
     }
 

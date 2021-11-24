@@ -24,6 +24,11 @@ public class Interactable : MonoBehaviour
         get { return _activationVerb; }
     }
 
+    public void Consume()
+    {
+        live = false;
+    }
+
     private void Start()
     {
         if (maxDistanceActivate > maxDistanceNotice)
